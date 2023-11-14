@@ -9,7 +9,7 @@ let howLong = 0;
 let pointerCoordx = 25;
 let pointeCoordy = 170;
 let lerpResult = 0;
-let pointerSpeed = 150;
+let pointerSpeed = 150; 
 let mic, recorder, soundFile;
 let soundctx;
 
@@ -30,7 +30,7 @@ function setup() {
   recorder.setInput(mic);
 
  
-  soundFile = new p5.SoundFile();
+  //soundFile = new p5.SoundFile();
 }
 
 function draw() {
