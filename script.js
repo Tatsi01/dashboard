@@ -27,10 +27,10 @@ function setup() {
   recorder = new p5.SoundRecorder();
 
  
-  //recorder.setInput(mic);
+  recorder.setInput(mic);
 
  
-  //soundFile = new p5.SoundFile();
+  soundFile = new p5.SoundFile();
 }
 
 function draw() {
