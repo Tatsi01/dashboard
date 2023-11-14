@@ -12,6 +12,7 @@ let lerpResult = 0;
 let pointerSpeed = 150; 
 let mic, recorder, soundFile;
 let soundctx;
+let afbsduh = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -90,13 +91,13 @@ function lerpn( valueToLerp,  goal,duration  ,  startTime){
 }
 function mouseClicked()
 {
-  print(recorder.record());
+ 
    userStartAudio();
-  if ( mic.enabled) {
+  if ( mic.enabled && afbsduh == false) {
 
     recorder.record(soundFile);
     }
- if(recorder.record() == true)
+ if(afbsduh == true)
  {
    recorder.stop();
  }
