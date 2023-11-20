@@ -13,6 +13,9 @@ let pointerSpeed = 150;
 let mic, recorder, soundFile;
 let soundctx;
 let afbsduh = false;
+let playclip = false;
+let test = 100;
+let coordfile;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -32,6 +35,11 @@ function setup() {
 
  
   soundFile = new p5.SoundFile();
+  
+}
+function preload()
+{
+  coordfile = loadStrings("coords-save.txt");
 }
 
 function draw() {
@@ -96,11 +104,16 @@ function mouseClicked()
   if ( mic.enabled && afbsduh == false) {
 
     recorder.record(soundFile);
+    afbsduh = true;
+    print("this")
     }
- if(afbsduh == true)
- {
-   recorder.stop();
- }
+ 
+  if(playclip == true){
+    soundFile.play(); // play the result!
+     //saveSound(soundFile, 'mySound.wav');
+     // save file
+    print("done");
+  }
   if(isLerping == true)
   {
     isLerping = false;
@@ -114,6 +127,20 @@ function mouseClicked()
   print(buffer / pointerSpeed);
   howLong = abs(buffer / pointerSpeed);
 }
+function mouseReleased()
+{
+  print(coordfile[0]);
+  if(afbsduh == true && playclip == false)
+   {
+
+     recorder.stop();
+
+     playclip = true;
+     print("that");
+   }
+}
+
+
 function pointer()
 {
   fill("blue");
