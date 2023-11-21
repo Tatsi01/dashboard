@@ -16,10 +16,16 @@ let afbsduh = false;
 let playclip = false;
 let test = 100;
 let coordfile;
+let xString = "";
+let graphMode = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(255);
+  button = createButton('graph');
+  button.position(0, 0);
+  button.mousePressed(changeBG);
+
   soundctx = new getAudioContext();
  soundctx.suspend();
   mic = new p5.AudioIn();
@@ -41,7 +47,10 @@ function preload()
 {
   coordfile = loadStrings("coords-save.txt");
 }
-
+function graphin()
+{
+  graphMode = true;
+}
 function draw() {
   
   background(255);
@@ -105,14 +114,14 @@ function mouseClicked()
 
     recorder.record(soundFile);
     afbsduh = true;
-    print("this")
+    
     }
  
   if(playclip == true){
     soundFile.play(); // play the result!
      //saveSound(soundFile, 'mySound.wav');
      // save file
-    print("done");
+    
   }
   if(isLerping == true)
   {
@@ -124,26 +133,28 @@ function mouseClicked()
   startValue = pointerCoordx;
   endValue = mouseX;
   let buffer = mouseX - pointerCoordx;
-  print(buffer / pointerSpeed);
   howLong = abs(buffer / pointerSpeed);
+  xString = mouseX;
+  coordfile[1] = xString;
+  print(coordfile[1]);
 }
 function mouseReleased()
 {
-  print(coordfile[0]);
+
   if(afbsduh == true && playclip == false)
    {
 
      recorder.stop();
 
      playclip = true;
-     print("that");
+    
    }
 }
 
 
 function pointer()
 {
-  fill("blue");
+  fill('blue');
   beginShape();
   vertex(pointerCoordx,pointeCoordy);
   vertex(pointerCoordx,pointeCoordy - 40);
