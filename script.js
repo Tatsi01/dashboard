@@ -20,11 +20,11 @@ let xString = "";
 let graphMode = false;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(500, 500);
   background(255);
   button = createButton('graph');
   button.position(0, 0);
-  button.mousePressed(changeBG);
+  button.mousePressed(graphin);
 
   soundctx = new getAudioContext();
  soundctx.suspend();
@@ -50,15 +50,30 @@ function preload()
 function graphin()
 {
   graphMode = true;
+  print("new");
 }
 function draw() {
   
   background(255);
   //createCanvas(windowWidth,windowHeight);
-  fill("yellow");
-  rect(0,100,50,25);
-  pointer();
-  lerpLogic();
+  if(graphMode == false)
+  {
+    fill("yellow");
+    rect(0,100,50,25);
+    pointer();
+    lerpLogic();
+  }
+  if(graphMode == true)
+  {
+    for (let x = 0; x < 20; x = x + 25) {
+      for (let y = 0; y < 20; y = y + 25) {
+        print('asgh');
+          fill(255)
+          rect(x,y,x + 25,y - 25);
+      }
+    }
+  }
+  
   time1 = time1 + deltaTime / 1000;
   //time1 = time1 / 10;
   if(isLerping == true)
