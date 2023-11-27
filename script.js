@@ -18,10 +18,28 @@ let test = 100;
 let coordfile;
 let xString = "";
 let graphMode = false;
+let graphX = [];
+let graphY = [];
+let countX = -1;
+let countY = -1;
+ let textCount = 0;
+let drawingGraph = false;
+let fileGlossary= 1;
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(450, 450);
   background(255);
+  for (let x = 25; countX < 17; x = x + 25) {
+    countX++;
+    countY = -1;
+    graphX[countX] = x;
+    for (let y = 0; countY < 16; y = y + 25) {
+      countY++;
+      graphY[countY] = y;
+    }
+  }
+  print(graphX[17]);
+  print(graphY[16]);
   button = createButton('graph');
   button.position(0, 0);
   button.mousePressed(graphin);
@@ -46,18 +64,31 @@ function setup() {
 function preload()
 {
   coordfile = loadStrings("coords-save.txt");
+  coordfile[0] = "0";
 }
 function graphin()
 {
+  let something = 425 / coordfile.length - 1;
+  countX = 0;
+  graphX = [];
+  for (let x = 25; countX < coordfile.length ; x = x + something) {
+    
+     graphX[countX] = x;
+    countX++;
+  }
   graphMode = true;
+  drawingGraph = true;
+   background(255);
   print("new");
 }
 function draw() {
   
-  background(255);
+  
+ 
   //createCanvas(windowWidth,windowHeight);
   if(graphMode == false)
   {
+    background(255);
     fill("yellow");
     rect(0,100,50,25);
     pointer();
@@ -65,13 +96,41 @@ function draw() {
   }
   if(graphMode == true)
   {
-    for (let x = 0; x < 20; x = x + 25) {
-      for (let y = 0; y < 20; y = y + 25) {
-        print('asgh');
-          fill(255)
-          rect(x,y,x + 25,y - 25);
+    if(drawingGraph == true)
+    {
+      for (let i = 0; i < graphX.length  ; i++) {
+        for (let j = 0; j < graphY.length   ; j++) {
+          noFill();
+           rect(graphX[i], graphY[j], 425 / coordfile.length-1,25)
+          
+          if(graphY[j] == 400)
+          {
+            
+            strokeWeight(1);
+            fill(0);
+            textSize(9);
+            
+            text('x = ' + textCount, graphX[i], graphY[j] + 50);
+            textCount++; 
+          }
+         
+        }
+       
       }
+       drawingGraph = false;
     }
+     if(drawingGraph == false)
+     {
+       stroke('blue')
+       for (let i = 0; i < graphX.length   ; i++) {
+         print(coordfile);
+         if(coordfile[i + 1] != null)
+         {
+            line(graphX[i], coordfile[i], graphX[i + 1], coordfile[i + 1])
+         }
+        
+       }
+     }
   }
   
   time1 = time1 + deltaTime / 1000;
@@ -138,20 +197,26 @@ function mouseClicked()
      // save file
     
   }
-  if(isLerping == true)
+  if(graphMode == false)
   {
-    isLerping = false;
+    if(isLerping == true)
+      {
+        isLerping = false;
+
+        startingtime = null;
+      }
+      isLerping = true;
+      startValue = pointerCoordx;
+      endValue = mouseX;
+      let buffer = mouseX - pointerCoordx;
+      howLong = abs(buffer / pointerSpeed);
+      xString = mouseX;
+      coordfile[fileGlossary] = xString;
     
-    startingtime = null;
+      print(coordfile[fileGlossary]);
+    fileGlossary++;
   }
-  isLerping = true;
-  startValue = pointerCoordx;
-  endValue = mouseX;
-  let buffer = mouseX - pointerCoordx;
-  howLong = abs(buffer / pointerSpeed);
-  xString = mouseX;
-  coordfile[1] = xString;
-  print(coordfile[1]);
+  
 }
 function mouseReleased()
 {
