@@ -25,6 +25,8 @@ let countY = -1;
  let textCount = 0;
 let drawingGraph = false;
 let fileGlossary= 1;
+let isRecording = false;
+let hasRecorded = false;
 
 function setup() {
   createCanvas(450, 450);
@@ -43,7 +45,13 @@ function setup() {
   button = createButton('graph');
   button.position(0, 0);
   button.mousePressed(graphin);
-
+  buttonRec = createButton('record/stop record');
+  buttonRec.position(50, 0);
+  buttonRec.mousePressed(record(false)); 
+  buttonPLay = createButton('play');
+  buttonPLay.position(400, 0);
+  buttonPLay.mousePressed(record(true)); 
+  
   soundctx = new getAudioContext();
  soundctx.suspend();
   mic = new p5.AudioIn();
@@ -66,6 +74,31 @@ function preload()
   coordfile = loadStrings("coords-save.txt");
   coordfile[0] = "0";
 }
+
+function record(play)
+{
+  if(isRecording ==false && hasRecorded == false && play == false)
+  {
+    userStartAudio();
+    if ( mic.enabled ) {
+
+      recorder.record(soundFile);
+      isRecordig = true;
+      }
+    
+  }
+  if(isRecording == true && play == false)
+  {
+     isRecording = false;
+    hasRecorded = true;
+  }
+  if(hasRecorded == true && play == true)
+  {
+    
+  }
+   
+}
+
 function graphin()
 {
   let something = 425 / coordfile.length - 1;
@@ -183,13 +216,7 @@ function lerpn( valueToLerp,  goal,duration  ,  startTime){
 function mouseClicked()
 {
  
-   userStartAudio();
-  if ( mic.enabled && afbsduh == false) {
-
-    recorder.record(soundFile);
-    afbsduh = true;
-    
-    }
+   
  
   if(playclip == true){
     soundFile.play(); // play the result!
