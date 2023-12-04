@@ -27,6 +27,8 @@ let drawingGraph = false;
 let fileGlossary= 1;
 let isRecording = false;
 let hasRecorded = false;
+let held;
+
 
 function setup() {
   createCanvas(450, 450);
@@ -42,15 +44,7 @@ function setup() {
   }
   print(graphX[17]);
   print(graphY[16]);
-  button = createButton('graph');
-  button.position(0, 0);
-  button.mousePressed(graphin);
-  buttonRec = createButton('record/stop record');
-  buttonRec.position(50, 0);
-  buttonRec.mousePressed(record(false)); 
-  buttonPLay = createButton('play');
-  buttonPLay.position(400, 0);
-  buttonPLay.mousePressed(record(true)); 
+ 
   
   soundctx = new getAudioContext();
  soundctx.suspend();
@@ -67,34 +61,60 @@ function setup() {
 
  
   soundFile = new p5.SoundFile();
-  
+  button = createButton('graph');
+  button.position(0, 0);
+  button.mousePressed(graphin);
+  buttonRec = createButton('record/stop record');
+  buttonRec.position(50, 0);
+  buttonRec.mousePressed(record); 
+  buttonPLay = createButton('play');
+  buttonPLay.position(400, 0);
+  buttonPLay.mousePressed(record); 
 }
 function preload()
 {
+
+  
   coordfile = loadStrings("coords-save.txt");
   coordfile[0] = "0";
 }
 
-function record(play)
+async function record()
 {
-  if(isRecording ==false && hasRecorded == false && play == false)
+  if(mouseX > 225)
   {
-    userStartAudio();
+      playclip = true;
+  }
+  else
+  {
+      playclip = false;
+  }
+  userStartAudio();
+  print(playclip);
+  if(isRecording ==false && hasRecorded == false && playclip == false )
+  {
+    
     if ( mic.enabled ) {
 
       recorder.record(soundFile);
-      isRecordig = true;
+      await sleep(2000);
+      isRecording = true;
+      print("asd");
       }
     
   }
-  if(isRecording == true && play == false)
+  if(isRecording == true && playclip == false && held == true)
   {
      isRecording = false;
-    hasRecorded = true;
-  }
-  if(hasRecorded == true && play == true)
-  {
     
+     print("asds");
+    hasRecorded = true;
+    recorder.stop();
+  }
+  if(hasRecorded == true && playclip == true)
+  {
+    soundFile.play();
+    print("done");
   }
    
 }
@@ -215,15 +235,11 @@ function lerpn( valueToLerp,  goal,duration  ,  startTime){
 }
 function mouseClicked()
 {
+  held =true;
  
    
  
-  if(playclip == true){
-    soundFile.play(); // play the result!
-     //saveSound(soundFile, 'mySound.wav');
-     // save file
-    
-  }
+  
   if(graphMode == false)
   {
     if(isLerping == true)
@@ -240,22 +256,15 @@ function mouseClicked()
       xString = mouseX;
       coordfile[fileGlossary] = xString;
     
-      print(coordfile[fileGlossary]);
+     
     fileGlossary++;
   }
   
 }
 function mouseReleased()
 {
-
-  if(afbsduh == true && playclip == false)
-   {
-
-     recorder.stop();
-
-     playclip = true;
-    
-   }
+  held = false;
+ 
 }
 
 
@@ -271,4 +280,10 @@ function pointer()
   vertex(pointerCoordx - 5,pointeCoordy -40);
   vertex(pointerCoordx - 5, pointeCoordy);
   endShape(CLOSE);
+}
+function sleep(millisecondsDuration)
+{
+  return new Promise((resolve) => {
+    setTimeout(resolve, millisecondsDuration);
+  })
 }
